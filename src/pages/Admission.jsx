@@ -1,46 +1,44 @@
 import { Box, Button, Divider, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/system';
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 
-
-
 const BASE_URL = "http://localhost:8000/api/v1";
 
-const useStyles = makeStyles((theme) => ({
-    container: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '50px',
-        marginTop: 80,
+// Styled components
+const Container = styled(Box)({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '50px',
+    marginTop: 80,
+});
 
-    },
-    formContainer: {
-        padding: '30px',
-        border: "0px solid black",
-        maxWidth: "450px",
-        backgroundColor: "silver",
-    },
-    textField: {
-        marginTop: "20px",
-    },
-    buttonContainer: {
-        display: 'flex',
-        marginTop: "10px",
-    },
-    paymentConatiner: {
-        padding: "20px",
-        width: "400px",
-        border: "1px solid black",
-    }
-}));
+const FormContainer = styled(Box)({
+    padding: '30px',
+    border: "0px solid black",
+    maxWidth: "450px",
+    backgroundColor: "silver",
+});
 
+const StyledTextField = styled(TextField)({
+    marginTop: "20px",
+});
+
+const ButtonContainer = styled(Box)({
+    display: 'flex',
+    marginTop: "10px",
+});
+
+const PaymentContainer = styled(Box)({
+    padding: "20px",
+    width: "400px",
+    border: "1px solid black",
+});
 
 const Admission = () => {
-    const classes = useStyles();
     const navigate = useNavigate();
     const param = useParams();
     const role = localStorage.getItem("role");
@@ -148,28 +146,26 @@ const Admission = () => {
     }
 
     return (
-        <Box className={classes.container}>
-            <Box className={classes.formContainer}>
+        <Container>
+            <FormContainer>
                 <Typography>Admission Form</Typography>
-                <TextField
+                <StyledTextField
                     fullWidth
                     name="name"
                     size='small'
                     label="Name"
-                    className={classes.textField}
                     value={kidData.name}
                     onChange={handleChange}
                     error={!!kidDataError.name}
                     helperText={kidDataError.name}
                     margin="normal"
                 />
-                <TextField
+                <StyledTextField
                     fullWidth
                     name="age"
                     size='small'
                     label="Age"
                     type="number"
-                    className={classes.textField}
                     value={kidData.age}
                     onChange={handleChange}
                     error={!!kidDataError.age}
@@ -184,82 +180,91 @@ const Admission = () => {
                         size='small'
                         value={kidData.sex}
                         onChange={handleChange}
-                        error={!!kidDataError.sex}
-                        helperText={kidDataError.sex}
                         margin="normal"
                     >
-                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
                         <MenuItem value="male">Male</MenuItem>
                         <MenuItem value="female">Female</MenuItem>
                     </Select>
-                    {kidDataError.sex && <span style={{ color: "red", textAlign: "left", fontSize: "13px", marginLeft: "10px" }}>{kidDataError.sex}</span>}
+                    {kidDataError.sex && (
+                        <span style={{ color: "red", textAlign: "left", fontSize: "13px", marginLeft: "10px" }}>
+                            {kidDataError.sex}
+                        </span>
+                    )}
                 </FormControl>
 
-                <TextField
+                <StyledTextField
                     fullWidth
                     name="address"
-                    size='small'
+                    size="small"
                     label="Address"
-                    className={classes.textField}
                     value={kidData.address}
                     onChange={handleChange}
                     error={!!kidDataError.address}
                     helperText={kidDataError.address}
                     margin="normal"
                 />
-                <TextField
+                <StyledTextField
                     fullWidth
                     name="contact"
                     size='small'
                     label="Contact Number"
-                    className={classes.textField}
                     value={kidData.contact}
                     onChange={handleChange}
                     error={!!kidDataError.contact}
                     helperText={kidDataError.contact}
                     margin="normal"
                 />
-                <Box className={classes.buttonContainer}>
-                    <Button fullWidth variant='outlined'>Cancel</Button>
-                    <Button onClick={() => handleSubmit()} fullWidth variant='contained' sx={{ ml: 1 }}>Submit</Button>
-                </Box>
-
-            </Box>
+                <ButtonContainer>
+                    <Button fullWidth variant="outlined">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSubmit} fullWidth variant="contained" sx={{ ml: 1 }}>
+                        Submit
+                    </Button>
+                </ButtonContainer>
+            </FormContainer>
 
             <Box>
-                <Box className={classes.paymentConatiner}>
+                <PaymentContainer>
                     <span style={{ color: "red", fontSize: "22px", fontWeight: 600 }}>Fee Structure</span>
                     <Divider sx={{ bgcolor: "red" }} />
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1 }}>
                         <span>Admission Fee: </span>
-                        <span>5000 </span>
+                        <span>5000</span>
                     </Box>
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1 }}>
                         <span>Tuition Fee: </span>
-                        <span>2000 </span>
+                        <span>2000</span>
                     </Box>
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1 }}>
                         <span>Cultural Activity Fee: </span>
-                        <span>500 </span>
+                        <span>500</span>
                     </Box>
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1 }}>
                         <span>Other Fee: </span>
-                        <span>500 </span>
+                        <span>500</span>
                     </Box>
                     <Divider sx={{ bgcolor: "black", mt: 1 }} />
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1 }}>
                         <span>Total Amount: </span>
-                        <span>8000 </span>
+                        <span>8000</span>
                     </Box>
-                    <Button onClick={handlePayment} disabled={!kidId} fullWidth variant='contained' sx={{ mt: 2 }}>Pay 9000</Button>
-                </Box>
+                    <Button onClick={handlePayment} disabled={!kidId} fullWidth variant="contained" sx={{ mt: 2 }}>
+                        Pay 9000
+                    </Button>
+                </PaymentContainer>
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", padding: 1, mt: 2 }}>
-                    <span style={{color: "green"}}>Click on the below link to avail the 10% offer on admission fee.</span>
-                    <Button  onClick={()=> {window.open('https://docs.google.com/forms/d/e/1FAIpQLSf94XKUj8OihX17vg2RCkAbuWhbCbMC1gO0H3aRL7Mg59DYEQ/viewform?usp=sf_link', '_blank');}} sx={{marginTop: 1}}>Link</Button>
+                    <span style={{ color: "green" }}>Click on the below link to avail the 10% offer on admission fee.</span>
+                    <Button onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSf94XKUj8OihX17vg2RCkAbuWhbCbMC1gO0H3aRL7Mg59DYEQ/viewform?usp=sf_link', '_blank')} sx={{ marginTop: 1 }}>
+                        Link
+                    </Button>
                 </Box>
             </Box>
-        </Box>
-    )
-}
+        </Container>
+    );
+};
 
-export default Admission
+export default Admission;

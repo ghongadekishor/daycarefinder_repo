@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { Container, Typography, Box, Button, Grid, MenuItem, InputLabel, FormControl, Select } from '@mui/material';
 import Header from '../components/Header';
 import Snackbar from "../components/Snackbar";
@@ -16,38 +16,41 @@ const BASE_URL = "http://localhost:8000/api/v1";
 
 const theme = createTheme();
 
-const useStyles = makeStyles((theme) => ({
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'left',
-        marginTop: 4,
-    },
-    infoBox: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'start',
-        marginTop: 4,
-    },
-    infoItem: {
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: 2,
-    },
-    label: {
-        marginRight: 2,
-        fontWeight: 'bold',
-    },
-    value: {
-        fontSize: '1.2rem',
-    },
-    button: {
-        marginTop: 4,
-    },
+// Styled components
+const StyledContainer = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'left',
+    marginTop: theme.spacing(4),
+}));
+
+const InfoBox = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'start',
+    marginTop: theme.spacing(4),
+}));
+
+const InfoItem = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: theme.spacing(2),
+}));
+
+const Label = styled(Typography)(({ theme }) => ({
+    marginRight: theme.spacing(2),
+    fontWeight: 'bold',
+}));
+
+const Value = styled(Typography)(({ theme }) => ({
+    fontSize: '1.2rem',
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+    marginTop: theme.spacing(4),
 }));
 
 const ProfilePage = () => {
-    const classes = useStyles();
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -56,23 +59,21 @@ const ProfilePage = () => {
     const [user, setUser] = useState();
 
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState(false)
-    const [success, setSuccess] = useState(false)
-    const [firstNameError, setFirstNameError] = useState(false)
-    const [lastNameError, setLastNameError] = useState(false)
-    const [emailError, setEmailError] = useState(false)
-    const [addressError, setaddressError] = useState(false)
-    const [address, setaddress] = useState()
-    const [contactNumberError, setContactNumberError] = useState(false)
+    const [error, setError] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [firstNameError, setFirstNameError] = useState(false);
+    const [lastNameError, setLastNameError] = useState(false);
+    const [emailError, setEmailError] = useState(false);
+    const [addressError, setAddressError] = useState(false);
+    const [address, setAddress] = useState();
+    const [contactNumberError, setContactNumberError] = useState(false);
     const [role, setRole] = useState();
     const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [contactNumber, setContactNumber] = useState();
-
-    const [passwordError, setPasswordError] = useState(false)
-
+    const [passwordError, setPasswordError] = useState(false);
 
     const validateEmail = (email) => {
         return String(email)
@@ -81,7 +82,6 @@ const ProfilePage = () => {
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             );
     };
-
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -96,53 +96,52 @@ const ProfilePage = () => {
             password: formData.get("password"),
             name: formData.get("firstName") + " " + formData.get("lastName"),
             role: user.role
-        }
+        };
 
-        const { email, contactNumber, password } = data
+        const { email, contactNumber, password } = data;
         if (email === "" || !validateEmail(email)) {
             er = true;
-            setEmailError(true)
+            setEmailError(true);
         } else {
-            setEmailError(false)
+            setEmailError(false);
         }
+
         if (formData.get("firstName") === "") {
             er = true;
-
-            setFirstNameError(true)
+            setFirstNameError(true);
         } else {
-            setFirstNameError(false)
+            setFirstNameError(false);
         }
 
         if (formData.get("lastName") === "") {
             er = true;
-            setLastNameError(true)
+            setLastNameError(true);
         } else {
-            setLastNameError(false)
+            setLastNameError(false);
         }
 
         if (formData.get("address") === "") {
             er = true;
-            setaddressError(true)
+            setAddressError(true);
         } else {
-            setaddressError(false)
+            setAddressError(false);
         }
 
-        if (contactNumber === "" || contactNumber.length != 10) {
+        if (contactNumber === "" || contactNumber.length !== 10) {
             er = true;
-
-            setContactNumberError(true)
+            setContactNumberError(true);
         } else {
-            setContactNumberError(false)
+            setContactNumberError(false);
         }
         if (password === "") {
             er = true;
-
-            setPasswordError(true)
+            setPasswordError(true);
         } else {
-            setPasswordError(false)
+            setPasswordError(false);
         }
+
         try {
-            if (er) throw "Invalid form data"
+            if (er) throw "Invalid form data";
             const response = await axios({
                 method: "put",
                 url: BASE_URL + "/users/update/" + user.id,
@@ -157,12 +156,11 @@ const ProfilePage = () => {
                 setEmail("");
                 setContactNumber("");
                 setRole("");
-                setaddress("");
-
+                setAddress("");
             }
         } catch (err) {
-            setError(true)
-            setTimeout(() => setError(false), 5000)
+            setError(true);
+            setTimeout(() => setError(false), 5000);
         }
     };
 
@@ -170,11 +168,11 @@ const ProfilePage = () => {
         if (!token) {
             navigate("/");
         }
-    }, [])
+    }, []);
 
     useEffect(() => {
-        loadLoggedInUserProfile()
-    }, [])
+        loadLoggedInUserProfile();
+    }, []);
 
     const loadLoggedInUserProfile = async () => {
         try {
@@ -185,7 +183,6 @@ const ProfilePage = () => {
             });
             if (response.data) {
                 setUser(response.data);
-
             } else {
                 setSnackbarMessage("Couldn't load profile");
                 setSnackbarSeverity("error");
@@ -197,15 +194,15 @@ const ProfilePage = () => {
             setOpenSnackbar(true);
             console.log(error);
         }
-    }
+    };
 
     const handleEditProfile = () => {
-        const name = user.name.split(" ")
+        const name = user.name.split(" ");
         setFirstName(name[0]);
         setLastName(name[name.length - 1]);
         setEmail(user.email);
         setContactNumber(user.contactNumber);
-        setaddress(user.address);
+        setAddress(user.address);
     };
 
     return (
@@ -214,43 +211,53 @@ const ProfilePage = () => {
             <Box sx={{ mt: 9, padding: 5 }}>
                 <Grid container spacing={4}>
                     <Grid item xs={6}>
-                        <Box maxWidth="sm" sx={{ padding: 3 }} >
+                        <StyledContainer maxWidth="sm" sx={{ padding: 3 }}>
                             <Box sx={{ paddingTop: 1, paddingLeft: 1, mb: 1, bgcolor: "#fff" }} display="flex">
                                 <Typography variant="h4" gutterBottom>
                                     Profile
                                 </Typography>
                             </Box>
 
-                            {user && <Box sx={{ paddingTop: 2, paddingLeft: 1, pb: 2, mb: 1, bgcolor: "#fff" }}>
-                                <div className={classes.infoItem}>
-                                    <Typography className={classes.label}>Name:</Typography>
-                                    <Typography className={classes.value}>{user.name}</Typography>
-                                </div>
-                                <div className={classes.infoItem}>
-                                    <Typography className={classes.label}>ID:</Typography>
-                                    <Typography className={classes.value}>{user.id}</Typography>
-                                </div>
-                                <div className={classes.infoItem}>
-                                    <Typography className={classes.label}>Role:</Typography>
-                                    <Typography className={classes.value}>{user.role}</Typography>
-                                </div>
-                                <div className={classes.infoItem}>
-                                    <Typography className={classes.label}>Address:</Typography>
-                                    <Typography className={classes.value}>{user.address}</Typography>
-                                </div>
-                                <div className={classes.infoItem}>
-                                    <Typography className={classes.label}>Contact Number:</Typography>
-                                    <Typography className={classes.value}>{user.contactNumber}</Typography>
-                                </div>
-                                <div className={classes.infoItem}>
-                                    <Typography className={classes.label}>Email:</Typography>
-                                    <Typography className={classes.value}>{user.email}</Typography>
-                                </div>
-                            </Box>}
-                            <Button fullWidth variant="contained" color="primary" sx={{background: `radial-gradient(circle, rgba(63,219,251,0.7120973389355743) 26%, rgba(252,70,107,1) 100%);`}} className={classes.button} onClick={handleEditProfile}>
+                            {user && (
+                                <InfoBox sx={{ paddingTop: 2, paddingLeft: 1, pb: 2, mb: 1, bgcolor: "#fff" }}>
+                                    <InfoItem>
+                                        <Label>Name:</Label>
+                                        <Value>{user.name}</Value>
+                                    </InfoItem>
+                                    <InfoItem>
+                                        <Label>ID:</Label>
+                                        <Value>{user.id}</Value>
+                                    </InfoItem>
+                                    <InfoItem>
+                                        <Label>Role:</Label>
+                                        <Value>{user.role}</Value>
+                                    </InfoItem>
+                                    <InfoItem>
+                                        <Label>Address:</Label>
+                                        <Value>{user.address}</Value>
+                                    </InfoItem>
+                                    <InfoItem>
+                                        <Label>Contact Number:</Label>
+                                        <Value>{user.contactNumber}</Value>
+                                    </InfoItem>
+                                    <InfoItem>
+                                        <Label>Email:</Label>
+                                        <Value>{user.email}</Value>
+                                    </InfoItem>
+                                </InfoBox>
+                            )}
+                            <StyledButton
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                sx={{
+                                    background: `radial-gradient(circle, rgba(63,219,251,0.7120973389355743) 26%, rgba(252,70,107,1) 100%);`,
+                                }}
+                                onClick={handleEditProfile}
+                            >
                                 Edit Profile
-                            </Button>
-                        </Box>
+                            </StyledButton>
+                        </StyledContainer>
                     </Grid>
                     <Grid item xs={6}>
                         <ThemeProvider theme={theme}>
@@ -258,146 +265,101 @@ const ProfilePage = () => {
                                 <CssBaseline />
                                 <Box
                                     sx={{
-                                        marginTop: 0,
+                                        marginTop: 8,
                                         display: "flex",
                                         flexDirection: "column",
                                         alignItems: "center",
                                     }}
                                 >
-                                    {error && <Alert severity="error">Error occured, while editing profile</Alert>}
-                                    {success && <Alert severity="success">Profile updated successfully</Alert>}
                                     <Typography component="h1" variant="h5">
                                         Edit Profile
                                     </Typography>
-                                    <Box
-                                        component="form"
-                                        noValidate
-                                        onSubmit={handleSubmit}
-                                        sx={{ mt: 3 }}
-                                    >
+                                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
                                         <Grid container spacing={2}>
                                             <Grid item xs={12} sm={6}>
                                                 <TextField
-                                                    value={firstName}
-                                                    error={firstNameError}
-                                                    helperText={firstNameError ? "Enter first name" : ""}
-                                                    onChange={(e) => {
-                                                        setFirstName(e.target.value)
-                                                        setFirstNameError(false)
-                                                    }}
                                                     name="firstName"
                                                     required
                                                     fullWidth
                                                     id="firstName"
-                                                    label={firstName?"": "First Name"}
-                                                    
+                                                    label="First Name"
+                                                    autoFocus
+                                                    error={firstNameError}
+                                                    value={firstName}
+                                                    onChange={(e) => setFirstName(e.target.value)}
                                                 />
                                             </Grid>
                                             <Grid item xs={12} sm={6}>
                                                 <TextField
-                                                    value={lastName}
-                                                    error={lastNameError}
-                                                    helperText={lastNameError ? "Enter last name" : ""}
-                                                    onChange={(e) => {
-                                                        setLastName(e.target.value)
-                                                        setLastNameError(false)
-                                                    }}
                                                     required
                                                     fullWidth
                                                     id="lastName"
-                                                    label={lastName?"": "Last Name"}
+                                                    label="Last Name"
                                                     name="lastName"
-                                                    
+                                                    error={lastNameError}
+                                                    value={lastName}
+                                                    onChange={(e) => setLastName(e.target.value)}
                                                 />
                                             </Grid>
-                                            <Grid item xs={12} sm={6}>
+                                            <Grid item xs={12}>
                                                 <TextField
-                                                    value={email}
-                                                    error={emailError}
-                                                    helperText={emailError ? "Enter valid email" : ""}
-                                                    onChange={(e) => {
-                                                        setEmail(e.target.value)
-                                                        setEmailError(false)
-                                                    }}
                                                     required
                                                     fullWidth
                                                     id="email"
-                                                    label={email?"": "Email"}
+                                                    label="Email Address"
                                                     name="email"
-                                                    autoComplete="email"
-
+                                                    error={emailError}
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
                                                 />
                                             </Grid>
-                                            <Grid item xs={12} sm={6}>
+                                            <Grid item xs={12}>
                                                 <TextField
-                                                    value={contactNumber}
-                                                    error={contactNumberError}
-                                                    helperText={contactNumberError ? "Enter valid contact number" : ""}
-                                                    onChange={(e) => {
-                                                        setContactNumber(e.target.value)
-                                                        setContactNumberError(false)
-                                                    }}
-                                                    required
-                                                    fullWidth
-                                                    id="contactNumber"
-                                                    label={contactNumber?"": "Contact Number"}
-                                                    name="contactNumber"
-                                                    autoComplete="contactNumber"
-                                                    type="number"
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} sm={12}>
-                                                <TextField
-                                                    error={addressError}
-                                                    value={address}
-                                                    helperText={addressError ? "Enter valid address" : ""}
-                                                    onChange={(e) => {
-                                                        setaddress(e.target.value)
-                                                        setaddressError(false)}}
                                                     required
                                                     fullWidth
                                                     id="address"
-                                                    label={address?"": "Address"}
+                                                    label="Address"
                                                     name="address"
-                                                    autoComplete="address"
-                                                    type="text"
+                                                    error={addressError}
+                                                    value={address}
+                                                    onChange={(e) => setAddress(e.target.value)}
                                                 />
                                             </Grid>
-                                            
                                             <Grid item xs={12}>
                                                 <TextField
-                                                    error={passwordError}
-                                                    helperText={passwordError ? "Enter valid password" : ""}
-                                                    onChange={(e) => setPasswordError(false)}
+                                                    required
+                                                    fullWidth
+                                                    name="contactNumber"
+                                                    label="Contact Number"
+                                                    type="number"
+                                                    id="contactNumber"
+                                                    error={contactNumberError}
+                                                    value={contactNumber}
+                                                    onChange={(e) => setContactNumber(e.target.value)}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
                                                     required
                                                     fullWidth
                                                     name="password"
                                                     label="Password"
                                                     type={showPassword ? "text" : "password"}
                                                     id="password"
-                                                    autoComplete="new-password"
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <FormControlLabel
-                                                    control={
-                                                        <Checkbox
-                                                            onChange={() => setShowPassword(!showPassword)}
-                                                            value={showPassword}
-                                                            color="primary"
-                                                        />
-                                                    }
-                                                    label="Show Password"
+                                                    error={passwordError}
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
                                                 />
                                             </Grid>
                                         </Grid>
+
                                         <Button
                                             type="submit"
                                             fullWidth
                                             variant="contained"
-                                            sx={{ mt: 3, mb: 2, background: `radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);` }}
+                                            sx={{ mt: 3, mb: 2 }}
                                         >
-                                            Update Profile
+                                            Save Changes
                                         </Button>
                                     </Box>
                                 </Box>
@@ -405,11 +367,9 @@ const ProfilePage = () => {
                         </ThemeProvider>
                     </Grid>
                 </Grid>
-
             </Box>
-
+            <Snackbar open={openSnackbar} autoHideDuration={6000} message={snackbarMessage} severity={snackbarSeverity} />
         </div>
-
     );
 };
 
